@@ -32,6 +32,8 @@ const App = () => (
               </PrivateRoute>
             }
           />
+          <Route path="/admin-login" element={<Login />} />
+          <Route path="/admin" element={<Admin />} />
 
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
