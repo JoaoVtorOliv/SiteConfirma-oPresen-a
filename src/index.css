@@ -1,0 +1,200 @@
+@import "@fontsource/playfair-display/400.css";
+@import "@fontsource/playfair-display/500.css";
+@import "@fontsource/playfair-display/600.css";
+@import "@fontsource/playfair-display/700.css";
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Wedding RSVP Design System — Verde Oliva Elegante */
+
+@layer base {
+  :root {
+    /* 🌿 Base neutra */
+    --background: 60 20% 98%;
+    --foreground: 90 15% 18%;
+
+    --card: 60 20% 97%;
+    --card-foreground: 90 15% 18%;
+
+    --popover: 60 20% 97%;
+    --popover-foreground: 90 15% 18%;
+
+    /* 🌿 Verde oliva principal */
+    --primary: 85 30% 35%;
+    --primary-foreground: 60 20% 98%;
+
+    /* Tons secundários suaves */
+    --secondary: 85 25% 85%;
+    --secondary-foreground: 90 20% 20%;
+
+    --muted: 85 20% 90%;
+    --muted-foreground: 90 10% 45%;
+
+    --accent: 85 35% 40%;
+    --accent-foreground: 60 20% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 60 20% 98%;
+
+    --border: 85 20% 82%;
+    --input: 85 20% 82%;
+    --ring: 85 30% 35%;
+
+    --radius: 0.5rem;
+
+    /* 🎨 Cores customizadas do design */
+    --gold: 45 35% 45%;
+    --gold-light: 45 45% 65%;
+    --gold-dark: 45 30% 35%;
+
+    --rose: 350 25% 75%;
+    --rose-deep: 350 30% 65%;
+
+    --cream: 60 30% 96%;
+    --cream-dark: 60 25% 90%;
+
+    --warm-brown: 90 15% 20%;
+    --warm-brown-light: 90 10% 40%;
+
+    /* Tipografia */
+    --font-serif: "Playfair Display", serif;
+    --font-body: "Cormorant Garamond", serif;
+
+    /* Sombras elegantes */
+    --shadow-soft: 0 6px 20px hsl(85 30% 35% / 0.08);
+    --shadow-elegant: 0 10px 30px hsl(85 30% 35% / 0.12);
+    --shadow-card: 0 4px 16px hsl(85 20% 30% / 0.1);
+
+    /* Gradientes */
+    --gradient-gold: linear-gradient(135deg, hsl(45 35% 45%), hsl(45 45% 60%));
+
+    --gradient-rose: linear-gradient(
+      135deg,
+      hsl(350 25% 75%),
+      hsl(350 20% 70%)
+    );
+
+    --gradient-cream: linear-gradient(180deg, hsl(60 30% 98%), hsl(60 25% 94%));
+  }
+
+  /* 🌙 Modo escuro oliva */
+  .dark {
+    --background: 90 15% 10%;
+    --foreground: 60 20% 95%;
+
+    --card: 90 15% 14%;
+    --card-foreground: 60 20% 95%;
+
+    --popover: 90 15% 14%;
+    --popover-foreground: 60 20% 95%;
+
+    --primary: 85 35% 45%;
+    --primary-foreground: 90 15% 10%;
+
+    --secondary: 90 10% 20%;
+    --secondary-foreground: 60 20% 95%;
+
+    --muted: 90 10% 18%;
+    --muted-foreground: 85 15% 60%;
+
+    --accent: 85 25% 30%;
+    --accent-foreground: 60 20% 95%;
+
+    --border: 90 10% 20%;
+    --input: 90 10% 20%;
+    --ring: 85 35% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  .wedding-title {
+    font-family: var(--font-serif);
+    @apply text-foreground tracking-wide;
+  }
+
+  .wedding-subtitle {
+    font-family: var(--font-body);
+    @apply text-muted-foreground tracking-widest uppercase text-sm;
+  }
+
+  .wedding-card {
+    background: var(--gradient-cream);
+    box-shadow: var(--shadow-card);
+    @apply rounded-lg border border-border/50;
+  }
+
+  .gold-text {
+    color: hsl(var(--gold));
+  }
+
+  .gold-gradient-text {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .decorative-line {
+    @apply h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent;
+  }
+}
