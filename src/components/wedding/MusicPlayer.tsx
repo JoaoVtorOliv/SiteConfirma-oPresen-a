@@ -20,12 +20,10 @@ const MusicPlayer = () => {
   const isPlayingRef = useRef(false);
   const firstMount = useRef(true);
 
-  // Sync ref so song-change effect always has the latest value
   useEffect(() => {
     isPlayingRef.current = isPlaying;
   }, [isPlaying]);
 
-  // Mount: try to autoplay; fall back to first user interaction
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -33,21 +31,24 @@ const MusicPlayer = () => {
     const onEnded = () => setCurrentIndex((i) => (i + 1) % SONGS.length);
     audio.addEventListener("ended", onEnded);
 
-    let interactPlayed = false;
-    const onInteract = () => {
-      if (interactPlayed) return;
-      interactPlayed = true;
-      audio
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => {});
-    };
-
+    // Inicia mutado — navegadores permitem autoplay sem som
+    // Desmuta no primeiro gesto do visitante (click, scroll ou toque)
+    audio.muted = true;
     audio
       .play()
-      .then(() => setIsPlaying(true))
+      .then(() => {
+        setIsPlaying(true);
+        const unmute = () => { audio.muted = false; };
+        document.addEventListener("click", unmute, { once: true });
+        document.addEventListener("scroll", unmute, { once: true });
+        document.addEventListener("touchstart", unmute, { once: true });
+      })
       .catch(() => {
-        // Autoplay blocked by browser policy — start on first user gesture
+        // Fallback: se até o autoplay mutado falhar, toca no primeiro gesto
+        const onInteract = () => {
+          audio.muted = false;
+          audio.play().then(() => setIsPlaying(true)).catch(() => {});
+        };
         document.addEventListener("click", onInteract, { once: true });
         document.addEventListener("scroll", onInteract, { once: true });
         document.addEventListener("touchstart", onInteract, { once: true });
@@ -55,13 +56,9 @@ const MusicPlayer = () => {
 
     return () => {
       audio.removeEventListener("ended", onEnded);
-      document.removeEventListener("click", onInteract);
-      document.removeEventListener("scroll", onInteract);
-      document.removeEventListener("touchstart", onInteract);
     };
   }, []);
 
-  // When the song index changes, swap the audio source and resume if playing
   useEffect(() => {
     if (firstMount.current) {
       firstMount.current = false;
@@ -72,10 +69,7 @@ const MusicPlayer = () => {
     audio.src = SONGS[currentIndex].file;
     audio.load();
     if (isPlayingRef.current) {
-      audio
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => setIsPlaying(false));
+      audio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
     }
   }, [currentIndex]);
 
@@ -86,10 +80,8 @@ const MusicPlayer = () => {
       audio.pause();
       setIsPlaying(false);
     } else {
-      audio
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch(() => {});
+      audio.muted = false;
+      audio.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   };
 
@@ -97,8 +89,8 @@ const MusicPlayer = () => {
 
   return (
     <>
-      /* eslint-disable-next-line jsx-a11y/media-has-caption */
       <audio ref={audioRef} src={SONGS[0].file} preload="auto" />
+
       <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-border rounded-full px-4 py-2 shadow-lg">
         <Music className="w-4 h-4 text-primary shrink-0" />
 
