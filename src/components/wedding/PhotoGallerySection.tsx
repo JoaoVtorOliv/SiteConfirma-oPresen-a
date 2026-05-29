@@ -114,14 +114,14 @@ const PhotoGallerySection = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="grid grid-cols-2 md:grid-cols-3 auto-rows-[200px] gap-3 md:gap-4 lg:gap-6"
+        className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 lg:gap-6"
       >
         {photos.map((photo, index) => (
           <motion.div
             key={photo.id}
             variants={itemVariants}
             className={`group relative overflow-hidden rounded-lg md:rounded-xl cursor-pointer ${
-              index === 0 ? "col-span-2 row-span-2" : ""
+              index === 0 ? "col-span-2 row-span-2" : "aspect-square"
             }`}
             onClick={() => openLightbox(photo, index)}
           >
