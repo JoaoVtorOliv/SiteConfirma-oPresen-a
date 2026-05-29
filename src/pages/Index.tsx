@@ -9,6 +9,7 @@ import GiftListSection from "@/components/wedding/GiftListSection";
 import RSVPForm from "@/components/wedding/RSVPForm";
 import WeddingFooter from "@/components/wedding/WeddingFooter";
 import WeddingNav from "@/components/wedding/WeddingNav";
+import MusicPlayer from "@/components/wedding/MusicPlayer";
 import weddingFlowers from "@/assets/wedding-flowers.png";
 
 const Index = () => {
@@ -119,6 +120,7 @@ const Index = () => {
         </div>
       </div>
 
+      <MusicPlayer />
     </div>
   );
 };
