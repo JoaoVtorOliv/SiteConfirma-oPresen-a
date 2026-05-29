@@ -29,8 +29,8 @@ const HeroSection = ({ onRSVPClick }: HeroSectionProps) => {
           transition={{ delay: 0.3, duration: 0.8 }}
           className="wedding-subtitle mb-6 tracking-[0.3em] text-xs md:text-sm"
         >
-          “Assim, eles já não são dois, mas sim uma só carne. Portanto, o que
-          Deus uniu, ninguém o separe.”<br></br>— Mateus 19:6
+          "Assim, eles já não são dois, mas sim uma só carne. Portanto, o que
+          Deus uniu, ninguém o separe."<br></br>— Mateus 19:6
         </motion.p>
 
         {/* Decorative top flourish */}
@@ -75,6 +75,25 @@ const HeroSection = ({ onRSVPClick }: HeroSectionProps) => {
             {GROOM_NAME}
           </motion.span>
         </h1>
+
+        {/* CTA Button + scroll hint */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1, duration: 0.8 }}
+          className="flex flex-col items-center gap-6 mt-4"
+        >
+          <Button
+            size="lg"
+            onClick={onRSVPClick}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base md:text-lg shadow-elegant"
+          >
+            <Heart className="w-5 h-5 mr-2" fill="currentColor" />
+            Confirmar Presença
+          </Button>
+
+          <ChevronDown className="w-6 h-6 text-primary/60 animate-bounce" />
+        </motion.div>
       </motion.div>
     </section>
   );

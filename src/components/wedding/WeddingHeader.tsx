@@ -1,3 +1,4 @@
+// @deprecated — HeroSection already covers this role; this component is not imported anywhere.
 import { motion } from "framer-motion";
 import { BRIDE_NAME, GROOM_NAME } from "@/lib/constants";
 import { Heart } from "lucide-react";

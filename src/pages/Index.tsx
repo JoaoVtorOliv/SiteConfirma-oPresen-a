@@ -8,6 +8,7 @@ import PhotoGallerySection from "@/components/wedding/PhotoGallerySection";
 import GiftListSection from "@/components/wedding/GiftListSection";
 import RSVPForm from "@/components/wedding/RSVPForm";
 import WeddingFooter from "@/components/wedding/WeddingFooter";
+import WeddingNav from "@/components/wedding/WeddingNav";
 import weddingFlowers from "@/assets/wedding-flowers.png";
 
 const Index = () => {
@@ -19,9 +20,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
+      <WeddingNav onRSVPClick={scrollToRSVP} />
+
       {/* Decorative Background Elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Top left floral */}
         <div
           className="absolute -top-20 -left-20 w-72 md:w-96 h-72 md:h-96 opacity-15"
           style={{
@@ -31,7 +33,6 @@ const Index = () => {
             transform: "rotate(-30deg)",
           }}
         />
-        {/* Bottom right floral */}
         <div
           className="absolute -bottom-20 -right-20 w-72 md:w-96 h-72 md:h-96 opacity-15"
           style={{
@@ -41,26 +42,25 @@ const Index = () => {
             transform: "rotate(150deg)",
           }}
         />
-        {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-olive-light/30 via-transparent to-primary/5" />
       </div>
 
       {/* Main Content */}
       <div className="relative z-10">
-        {/* Hero Section - Full viewport */}
-        <HeroSection onRSVPClick={scrollToRSVP} />
+        {/* Hero Section */}
+        <section id="inicio">
+          <HeroSection onRSVPClick={scrollToRSVP} />
+        </section>
 
-        {/* Divider */}
         <div className="container max-w-4xl mx-auto px-4">
           <div className="mx-auto w-40 decorative-line" />
         </div>
 
         {/* Event Info Section */}
-        <div className="container max-w-4xl mx-auto px-4">
+        <div id="evento" className="container max-w-4xl mx-auto px-4">
           <EventInfoSection />
         </div>
 
-        {/* Divider */}
         <div className="container max-w-4xl mx-auto px-4">
           <div className="mx-auto w-40 decorative-line" />
         </div>
@@ -70,37 +70,33 @@ const Index = () => {
           <CountdownSection />
         </div>
 
-        {/* Divider */}
         <div className="container max-w-4xl mx-auto px-4">
           <div className="mx-auto w-40 decorative-line" />
         </div>
 
         {/* Couple Message Section */}
-        <div className="container max-w-4xl mx-auto px-4">
+        <div id="historia" className="container max-w-4xl mx-auto px-4">
           <CoupleMessageSection onRSVPClick={scrollToRSVP} />
         </div>
 
-        {/* Divider */}
         <div className="container max-w-4xl mx-auto px-4">
           <div className="mx-auto w-40 decorative-line" />
         </div>
 
         {/* Photo Gallery Section */}
-        <div className="container max-w-5xl mx-auto px-4">
+        <div id="galeria" className="container max-w-5xl mx-auto px-4">
           <PhotoGallerySection />
         </div>
 
-        {/* Divider */}
         <div className="container max-w-4xl mx-auto px-4">
           <div className="mx-auto w-40 decorative-line" />
         </div>
 
         {/* Gift List Section */}
-        <div className="container max-w-4xl mx-auto px-4">
+        <div id="presentes" className="container max-w-4xl mx-auto px-4">
           <GiftListSection />
         </div>
 
-        {/* Divider */}
         <div className="container max-w-4xl mx-auto px-4">
           <div className="mx-auto w-40 decorative-line" />
         </div>
@@ -108,6 +104,7 @@ const Index = () => {
         {/* RSVP Form Section */}
         <motion.div
           ref={rsvpRef}
+          id="confirmar"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -121,6 +118,7 @@ const Index = () => {
           <WeddingFooter />
         </div>
       </div>
+
     </div>
   );
 };

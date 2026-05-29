@@ -17,58 +17,26 @@ interface Photo {
   caption?: string;
 }
 
-// Placeholder photos - replace with actual couple photos
 const photos: Photo[] = [
-  {
-    id: 1,
-    src: foto2,
-    alt: " ",
-    caption: " ",
-  },
-  {
-    id: 2,
-    src: foto3,
-    alt: " ",
-    caption: " ",
-  },
-  {
-    id: 3,
-    src: foto4,
-    alt: " ",
-    caption: " ",
-  },
-  {
-    id: 4,
-    src: foto5,
-    alt: " ",
-    caption: " ",
-  },
-  {
-    id: 5,
-    src: foto6,
-    alt: " ",
-    caption: " ",
-  },
-  {
-    id: 6,
-    src: foto7,
-    alt: " ",
-    caption: " ",
-  },
+  { id: 1, src: foto2, alt: " ", caption: " " },
+  { id: 2, src: foto3, alt: " ", caption: " " },
+  { id: 3, src: foto4, alt: " ", caption: " " },
+  { id: 4, src: foto5, alt: " ", caption: " " },
+  { id: 5, src: foto6, alt: " ", caption: " " },
+  { id: 6, src: foto7, alt: " ", caption: " " },
 ];
 
 const PhotoGallerySection = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
   const openLightbox = (photo: Photo, index: number) => {
     setSelectedPhoto(photo);
     setCurrentIndex(index);
   };
 
-  const closeLightbox = () => {
-    setSelectedPhoto(null);
-  };
+  const closeLightbox = () => setSelectedPhoto(null);
 
   const goToPrevious = useCallback(() => {
     const newIndex = currentIndex === 0 ? photos.length - 1 : currentIndex - 1;
@@ -82,32 +50,32 @@ const PhotoGallerySection = () => {
     setSelectedPhoto(photos[newIndex]);
   }, [currentIndex]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!selectedPhoto) return;
-
-      if (e.key === "ArrowLeft") {
-        goToPrevious();
-      } else if (e.key === "ArrowRight") {
-        goToNext();
-      } else if (e.key === "Escape") {
-        closeLightbox();
-      }
+      if (e.key === "ArrowLeft") goToPrevious();
+      else if (e.key === "ArrowRight") goToNext();
+      else if (e.key === "Escape") closeLightbox();
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedPhoto, goToPrevious, goToNext]);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const delta = touchStartX - e.changedTouches[0].clientX;
+    if (delta > 50) goToNext();
+    else if (delta < -50) goToPrevious();
+    setTouchStartX(null);
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
 
   const itemVariants = {
@@ -115,10 +83,7 @@ const PhotoGallerySection = () => {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut" as const,
-      },
+      transition: { duration: 0.5, ease: "easeOut" as const },
     },
   };
 
@@ -143,22 +108,23 @@ const PhotoGallerySection = () => {
         </h2>
       </motion.div>
 
-      {/* Photo Grid */}
+      {/* Photo Grid — first photo is the featured hero */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 lg:gap-6"
+        className="grid grid-cols-2 md:grid-cols-3 auto-rows-[200px] gap-3 md:gap-4 lg:gap-6"
       >
         {photos.map((photo, index) => (
           <motion.div
             key={photo.id}
             variants={itemVariants}
-            className="group relative aspect-square overflow-hidden rounded-lg md:rounded-xl cursor-pointer"
+            className={`group relative overflow-hidden rounded-lg md:rounded-xl cursor-pointer ${
+              index === 0 ? "col-span-2 row-span-2" : ""
+            }`}
             onClick={() => openLightbox(photo, index)}
           >
-            {/* Image */}
             <img
               src={photo.src}
               alt={photo.alt}
@@ -166,10 +132,8 @@ const PhotoGallerySection = () => {
               loading="lazy"
             />
 
-            {/* Hover Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-            {/* Caption on Hover */}
             {photo.caption && (
               <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                 <p className="text-background text-sm md:text-base font-body text-center">
@@ -178,7 +142,6 @@ const PhotoGallerySection = () => {
               </div>
             )}
 
-            {/* Subtle border glow on hover */}
             <div className="absolute inset-0 rounded-lg md:rounded-xl border-2 border-transparent group-hover:border-primary/30 transition-colors duration-300" />
           </motion.div>
         ))}
@@ -200,11 +163,11 @@ const PhotoGallerySection = () => {
                 <X className="w-5 h-5" />
               </Button>
 
-              {/* Navigation Arrows */}
+              {/* Navigation Arrows — visible on all screens */}
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 bg-background/80 hover:bg-background rounded-full hidden md:flex"
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 bg-background/80 hover:bg-background rounded-full"
                 onClick={goToPrevious}
                 aria-label="Foto anterior"
               >
@@ -214,20 +177,22 @@ const PhotoGallerySection = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 bg-background/80 hover:bg-background rounded-full hidden md:flex"
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 bg-background/80 hover:bg-background rounded-full"
                 onClick={goToNext}
                 aria-label="Próxima foto"
               >
                 <ChevronRight className="w-6 h-6" />
               </Button>
 
-              {/* Image */}
+              {/* Image with swipe support */}
               <motion.div
                 key={selectedPhoto.id}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
                 className="relative aspect-[4/3] md:aspect-video"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
               >
                 <img
                   src={selectedPhoto.src}
@@ -236,57 +201,33 @@ const PhotoGallerySection = () => {
                 />
               </motion.div>
 
-              {/* Caption */}
-              {selectedPhoto.caption && (
-                <div className="p-4 md:p-6 text-center border-t border-border/30">
+              {/* Caption + counter + dots */}
+              <div className="p-4 md:p-6 text-center border-t border-border/30">
+                {selectedPhoto.caption && (
                   <p className="font-body text-lg md:text-xl text-foreground">
                     {selectedPhoto.caption}
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {currentIndex + 1} de {photos.length}
-                  </p>
-                </div>
-              )}
+                )}
+                <p className="text-sm text-muted-foreground mt-1">
+                  {currentIndex + 1} de {photos.length}
+                </p>
 
-              {/* Mobile Swipe Hint */}
-              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-1 md:hidden">
-                {photos.map((_, idx) => (
-                  <div
-                    key={idx}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      idx === currentIndex ? "bg-primary" : "bg-primary/30"
-                    }`}
-                  />
-                ))}
+                {/* Dots indicator — mobile only */}
+                <div className="flex gap-1.5 justify-center mt-3 md:hidden">
+                  {photos.map((_, idx) => (
+                    <div
+                      key={idx}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        idx === currentIndex ? "bg-primary" : "bg-primary/30"
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           )}
         </DialogContent>
       </Dialog>
-
-      {/* Mobile Navigation Buttons (visible when lightbox is open) */}
-      {selectedPhoto && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] flex gap-4 md:hidden">
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-background/90 backdrop-blur-sm rounded-full w-12 h-12"
-            onClick={goToPrevious}
-            aria-label="Foto anterior"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="bg-background/90 backdrop-blur-sm rounded-full w-12 h-12"
-            onClick={goToNext}
-            aria-label="Próxima foto"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </Button>
-        </div>
-      )}
     </section>
   );
 };
