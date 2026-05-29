@@ -104,7 +104,7 @@ const PhotoGallerySection = () => {
         </div>
 
         <h2 className="wedding-title text-3xl md:text-4xl lg:text-5xl mb-4">
-          Alguns registros que marcaram nossa caminhada até aqui
+          O começo do nosso para sempre
         </h2>
       </motion.div>
 
