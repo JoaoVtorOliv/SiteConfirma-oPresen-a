@@ -3,7 +3,7 @@
 
 export const WEDDING_DATE = new Date("2026-10-03T16:00:00");
 export const WEDDING_TIME = "16:00";
-export const CONFIRMATION_DEADLINE = new Date("2026-09-03T23:59:59");
+export const CONFIRMATION_DEADLINE = new Date("2026-09-09T23:59:59");
 
 export const BRIDE_NAME = "Karolayne";
 export const GROOM_NAME = "Yuri";
